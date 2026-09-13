@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Element - Web Component</title>
+  <meta name="description" content="A lightweight, framework-agnostic web component for generating QR codes in the browser with zero dependencies.">
+  
+  <!-- CDN Import for @squidjam/qrcode-element -->
+  <script src="https://unpkg.com/@squidjam/qrcode-element@latest/dist/qrcode-element.umd.js"></script>
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --code-bg: #090d16;
+      --accent: #38bdf8;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header & Hero */
+    header {
+      padding: 60px 0 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #818cf8, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 24px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      text-decoration: none;
+    }
+
+    .btn-secondary {
+      background-color: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+    .btn-secondary:hover {
+      background-color: var(--card-border);
+      text-decoration: none;
+    }
+
+    /* Playground Section */
+    .playground-section {
+      margin: 50px 0;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--card-border);
+      padding-bottom: 8px;
+    }
+
+    .playground-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .playground-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input, select {
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input[type="color"] {
+      padding: 2px 4px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    .preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg);
+      border: 1px dashed var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .qr-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+    }
+
+    /* Generated HTML Output */
+    .code-output {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    /* Cards Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .feature-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    /* Code Block Styling */
+    pre {
+      background-color: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      background-color: #26334d;
+      color: var(--text);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--card-border);
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Header -->
+  <header>
+    <div class="container">
+      <div class="badges">
+        <a href="https://www.npmjs.com/package/@squidjam/qrcode-element" target="_blank">
+          <img src="https://img.shields.io/npm/v/@squidjam/qrcode-element.svg" alt="npm version">
+        </a>
+        <a href="./MIT-LICENSE.txt">
+          <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
+        </a>
+      </div>
+      <h1>&lt;qr-code&gt; Web Component</h1>
+      <p class="subtitle">A lightweight, framework-agnostic custom element for generating QR codes directly in the browser. Zero dependencies, ~4KB minified + gzipped.</p>
+      
+      <div class="btn-group">
+        <a href="#demo" class="btn btn-primary">Try Live Demo</a>
+        <a href="https://github.com/squidjam/qrcode-element" class="btn btn-secondary" target="_blank">View on GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="playground-section">
+      <h2 class="section-title">Interactive Playground</h2>
+      <div class="playground-grid">
+        
+        <!-- Controls -->
+        <div class="controls">
+          <div class="form-group">
+            <label for="qr-text">Text / URL</label>
+            <input type="text" id="qr-text" value="https://github.com/squidjam/qrcode-element">
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="qr-size">Size (px)</label>
+              <input type="number" id="qr-size" value="220" min="64" max="512" step="8">
+            </div>
+            <div class="form-group">
+              <label for="qr-render">Render Mode</label>
+              <select id="qr-render">
+                <option value="canvas" selected>Canvas</option>
+                <option value="svg">SVG</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="qr-fg">Foreground Color</label>
+              <input type="color" id="qr-fg" value="#000000">
+            </div>
+            <div class="form-group">
+              <label for="qr-bg">Background Color</label>
+              <input type="color" id="qr-bg" value="#ffffff">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="qr-error">Error Correction Level</label>
+            <select id="qr-error">
+              <option value="0" selected>0 (~7% Correction)</option>
+              <option value="1">1 (~15% Correction)</option>
+              <option value="2">2 (~25% Correction)</option>
+              <option value="3">3 (~30% Correction)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Live Preview -->
+        <div class="preview-box">
+          <div class="qr-container">
+            <!-- Web Component Implementation -->
+            <qr-code 
+              id="live-qr"
+              data-text="https://github.com/squidjam/qrcode-element"
+              data-width="220"
+              data-height="220"
+              data-render="canvas"
+              data-foreground="#000000"
+              data-background="#ffffff"
+              data-error-level="0">
+            </qr-code>
+          </div>
+
+          <!-- HTML Code Generator -->
+          <div class="code-output">
+            <label>Generated Snippet:</label>
+            <pre><code id="code-snippet">&lt;qr-code data-text="https://github.com/squidjam/qrcode-element" data-width="220" data-height="220"&gt;&lt;/qr-code&gt;</code></pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section>
+      <h2 class="section-title">Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>✨ Framework Agnostic</h3>
+          <p>Seamlessly works with React, Vue, Svelte, Angular, or vanilla JS.</p>
+        </div>
+        <div class="feature-card">
+          <h3>⚡ Zero Dependencies</h3>
+          <p>Pure JavaScript without bloat or third-party service dependencies.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📦 Ultra Lightweight</h3>
+          <p>~4KB minified and gzipped for optimal performance.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎨 Custom Options</h3>
+          <p>Choose Canvas or SVG rendering, color choices, and error levels.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation -->
+    <section>
+      <h2 class="section-title">Installation</h2>
+      
+      <h3>Via NPM</h3>
+      <pre><code>npm install @squidjam/qrcode-element</code></pre>
+
+      <p style="margin: 10px 0;">Then import it into your bundle:</p>
+      <pre><code>import '@squidjam/qrcode-element';</code></pre>
+
+      <h3 style="margin-top: 20px;">Via CDN</h3>
+      <pre><code>&lt;script src="https://unpkg.com/@squidjam/qrcode-element@latest/dist/qrcode-element.umd.js"&gt;&lt;/script&gt;</code></pre>
+    </section>
+
+    <!-- Attribute Reference -->
+    <section style="margin-top: 50px;">
+      <h2 class="section-title">Attributes & Properties</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>data-text</code></td>
+            <td>string</td>
+            <td>-</td>
+            <td>Text or URL to encode <strong>(required)</strong></td>
+          </tr>
+          <tr>
+            <td><code>data-width</code></td>
+            <td>number</td>
+            <td>256</td>
+            <td>Width in pixels</td>
+          </tr>
+          <tr>
+            <td><code>data-height</code></td>
+            <td>number</td>
+            <td>256</td>
+            <td>Height in pixels</td>
+          </tr>
+          <tr>
+            <td><code>data-render</code></td>
+            <td>string</td>
+            <td>canvas</td>
+            <td>Render type: <code>canvas</code> or <code>svg</code></td>
+          </tr>
+          <tr>
+            <td><code>data-foreground</code></td>
+            <td>string</td>
+            <td>#000000</td>
+            <td>Foreground color (hex)</td>
+          </tr>
+          <tr>
+            <td><code>data-background</code></td>
+            <td>string</td>
+            <td>#ffffff</td>
+            <td>Background color (hex)</td>
+          </tr>
+          <tr>
+            <td><code>data-error-level</code></td>
+            <td>number</td>
+            <td>0</td>
+            <td>Error correction level (0-3)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Framework Examples -->
+    <section style="margin-top: 50px;">
+      <h2 class="section-title">Framework Code Snippets</h2>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('react')">React</button>
+        <button class="tab-btn" onclick="switchTab('vue')">Vue 3</button>
+        <button class="tab-btn" onclick="switchTab('svelte')">Svelte</button>
+        <button class="tab-btn" onclick="switchTab('vanilla')">Vanilla JS</button>
+      </div>
+
+      <div id="tab-react" class="tab-content active">
+        <pre><code>import '@squidjam/qrcode-element';
+
+function App() {
+  return (
+    &lt;qr-code
+      data-text="https://example.com"
+      data-width="256"
+      data-height="256"
+    /&gt;
+  );
+}</code></pre>
+      </div>
+
+      <div id="tab-vue" class="tab-content">
+        <pre><code>&lt;template&gt;
+  &lt;qr-code
+    :data-text="url"
+    :data-width="256"
+    data-render="svg"
+  /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import '@squidjam/qrcode-element';
+import { ref } from 'vue';
+
+const url = ref('https://example.com');
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <div id="tab-svelte" class="tab-content">
+        <pre><code>&lt;script&gt;
+  import '@squidjam/qrcode-element';
+  let text = 'https://example.com';
+&lt;/script&gt;
+
+&lt;qr-code data-text={text} data-width="256" data-height="256" /&gt;</code></pre>
+      </div>
+
+      <div id="tab-vanilla" class="tab-content">
+        <pre><code>&lt;script src="https://unpkg.com/@squidjam/qrcode-element"&gt;&lt;/script&gt;
+
+&lt;qr-code data-text="https://example.com" data-width="256" data-height="256"&gt;&lt;/qr-code&gt;</code></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>Released under the <a href="./MIT-LICENSE.txt">MIT License</a>. Created by <a href="https://github.com/squidjam" target="_blank">Squidjam</a>.</p>
+    </div>
+  </footer>
+
+  <!-- Interactive Demo Script -->
+  <script>
+    const qrElement = document.getElementById('live-qr');
+    const inputContainer = document.querySelector('.controls');
+    const snippetElement = document.getElementById('code-snippet');
+
+    function updateQR() {
+      const text = document.getElementById('qr-text').value || ' ';
+      const size = document.getElementById('qr-size').value || '220';
+      const render = document.getElementById('qr-render').value;
+      const fg = document.getElementById('qr-fg').value;
+      const bg = document.getElementById('qr-bg').value;
+      const error = document.getElementById('qr-error').value;
+
+      // Update component attributes
+      qrElement.setAttribute('data-text', text);
+      qrElement.setAttribute('data-width', size);
+      qrElement.setAttribute('data-height', size);
+      qrElement.setAttribute('data-render', render);
+      qrElement.setAttribute('data-foreground', fg);
+      qrElement.setAttribute('data-background', bg);
+      qrElement.setAttribute('data-error-level', error);
+
+      // Generate snippet string
+      const snippet = `<qr-code\n  data-text="${text}"\n  data-width="${size}"\n  data-height="${size}"\n  data-render="${render}"\n  data-foreground="${fg}"\n  data-background="${bg}"\n  data-error-level="${error}"\n></qr-code>`;
+
+      snippetElement.textContent = snippet;
+    }
+
+    inputContainer.addEventListener('input', updateQR);
+
+    // Tab Switching Logic
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+
+    // Event listener on custom element ready event
+    qrElement.addEventListener('qrcode-ready', (e) => {
+      console.log('QR Code generated via event listener:', e.detail);
+    });
+  </script>
+
+</body>
+</html>

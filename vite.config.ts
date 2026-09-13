@@ -12,7 +12,6 @@ export default defineConfig({
         return 'qrcode-element.js';
       },
     },
-    minify: 'terser',
     sourcemap: true,
     target: 'ES2020',
   },
