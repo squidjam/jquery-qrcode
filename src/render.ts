@@ -1,4 +1,4 @@
-import { QRCode } from './qrcode';
+import { QRCode } from './qrcode.ts';
 
 export type RenderType = 'canvas' | 'svg';
 
