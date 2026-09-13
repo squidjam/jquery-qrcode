@@ -40,13 +40,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/squidjam/jquery-qrcode.git",
+    "url": "https://github.com/squidjam/qrcode-element.git",
     "directory": "."
   },
   "bugs": {
-    "url": "https://github.com/squidjam/jquery-qrcode/issues"
+    "url": "https://github.com/squidjam/qrcode-element/issues"
   },
-  "homepage": "https://github.com/squidjam/jquery-qrcode#readme",
+  "homepage": "https://github.com/squidjam/qrcode-element#readme",
   "devDependencies": {
     "@types/node": "^20.0.0",
     "eslint": "^8.50.0",

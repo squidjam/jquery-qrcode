@@ -339,6 +339,8 @@ MIT License - See [MIT-LICENSE.txt](./MIT-LICENSE.txt)
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
 ## Credits
 
 Based on the original [jquery-qrcode](https://github.com/jeromeetienne/jquery-qrcode) project, converted to a modern web component with zero dependencies.
@@ -352,3 +354,5 @@ Based on the original [jquery-qrcode](https://github.com/jeromeetienne/jquery-qr
 - ✨ Added SVG rendering option
 - ✨ Modern build tooling with Vite
 - ✨ Full NPM package distribution
+
+See [CHANGELOG.md](./CHANGELOG.md) for full history.

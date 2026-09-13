@@ -3,6 +3,8 @@
 ## Development Setup
 
 ```bash
+git clone https://github.com/squidjam/qrcode-element.git
+cd qrcode-element
 npm install
 ```
 
