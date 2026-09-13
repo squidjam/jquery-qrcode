@@ -159,6 +159,10 @@ class QRBitBuffer {
   buffer: number[] = [];
   length = 0;
 
+  getLengthInBits(): number {
+    return this.length;
+  }
+
   put(num: number, length: number) {
     for (let i = 0; i < length; i++) {
       this.putBit(((num >>> (length - i - 1)) & 1) === 1);
