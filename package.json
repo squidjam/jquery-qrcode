@@ -21,6 +21,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:docs": "vite build && cp dist/qrcode-element.js docs/qrcode-element.js && cp dist/qrcode-element.umd.js docs/qrcode-element.umd.js",
     "build:watch": "vite build --watch",
     "preview": "vite preview",
     "test": "vitest",
