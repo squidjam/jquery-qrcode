@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { QRCode } from '../src/qrcode';
-import { renderQRCode } from '../src/render';
+import { QRCode } from '../qrcode';
+import { renderQRCode } from '../render';
 
 describe('QRCode', () => {
   it('should create a QR code instance', () => {
@@ -21,7 +21,7 @@ describe('QRCode', () => {
     const qr = new QRCode(0, 0);
     qr.addData('Test');
     qr.make();
-    
+
     expect(qr.modules).toBeDefined();
     expect(qr.moduleCount).toBeGreaterThan(0);
     expect(qr.modules?.length).toBe(qr.moduleCount);
@@ -31,9 +31,18 @@ describe('QRCode', () => {
     const qr = new QRCode(0, 0);
     qr.addData('Consistent');
     qr.make();
-    
+
     const moduleCount = qr.moduleCount;
     expect(moduleCount).toBe(21); // Minimum QR code size
+  });
+
+  it('should select a larger version for the documentation URL', () => {
+    const qr = new QRCode(0, 0);
+    qr.addData('https://github.com/squidjam/qrcode-element');
+    qr.make();
+
+    expect(qr.typeNumber).toBeGreaterThan(1);
+    expect(qr.modules).toHaveLength(qr.moduleCount);
   });
 
   it('should handle different error correction levels', () => {
@@ -49,7 +58,7 @@ describe('QRCode', () => {
     const qr = new QRCode(0, 0);
     qr.addData('Test');
     qr.make();
-    
+
     expect(() => qr.isDark(-1, 0)).toThrow();
     expect(() => qr.isDark(qr.moduleCount, 0)).toThrow();
   });

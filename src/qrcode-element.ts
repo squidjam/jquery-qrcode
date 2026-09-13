@@ -16,9 +16,7 @@ import { renderQRCode, RenderType } from './render';
  *   - data-error-level: Error correction level 0-3 (default: 0)
  */
 export class QRCodeElement extends HTMLElement {
-  private container: HTMLDivElement | null = null;
   private resizeObserver: ResizeObserver | null = null;
-  private currentRender: 'canvas' | 'svg' = 'canvas';
 
   static register(tag = 'qr-code') {
     if (!customElements.get(tag)) {
@@ -40,11 +38,7 @@ export class QRCodeElement extends HTMLElement {
     this.cleanupResizeObserver();
   }
 
-  attributeChangedCallback(
-    name: string,
-    oldValue: string | null,
-    newValue: string | null
-  ) {
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue !== newValue) {
       this.render();
     }
@@ -124,7 +118,8 @@ export class QRCodeElement extends HTMLElement {
 
     const text = this.text;
     if (!text) {
-      shadow.innerHTML = '<style>:host { display: block; } div { color: red; }  </style><div>No text provided</div>';
+      shadow.innerHTML =
+        '<style>:host { display: block; } div { color: red; }  </style><div>No text provided</div>';
       return;
     }
 
