@@ -1,0 +1,59 @@
+{
+  "name": "@squidjam/qrcode-element",
+  "version": "2.0.0",
+  "description": "A lightweight, framework-agnostic web component for QR code generation",
+  "type": "module",
+  "main": "dist/qrcode-element.js",
+  "module": "dist/qrcode-element.js",
+  "unpkg": "dist/qrcode-element.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/qrcode-element.js",
+      "require": "./dist/qrcode-element.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "MIT-LICENSE.txt"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "lint": "eslint src",
+    "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "qrcode",
+    "web-component",
+    "custom-element",
+    "standalone",
+    "framework-agnostic"
+  ],
+  "author": "Jerome Etienne, squidjam",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/squidjam/jquery-qrcode.git",
+    "directory": "."
+  },
+  "bugs": {
+    "url": "https://github.com/squidjam/jquery-qrcode/issues"
+  },
+  "homepage": "https://github.com/squidjam/jquery-qrcode#readme",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.2.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}
