@@ -8,12 +8,19 @@ A lightweight, framework-agnostic web component for generating QR codes directly
 ## Features
 
 ✨ **Framework Agnostic** - Works with React, Vue, Svelte, Angular, vanilla JS, or any framework
+
 ✨ **No Dependencies** - Pure JavaScript, no external libraries or services
+
 ✨ **Fast & Lightweight** - ~4KB minified+gzipped
+
 ✨ **Multiple Render Options** - Canvas or SVG rendering
+
 ✨ **Customizable** - Colors, sizes, error correction levels
+
 ✨ **Standard Web Component** - Uses Custom Elements API
+
 ✨ **TypeScript Support** - Full type definitions included
+
 ✨ **NPM Package** - Easy installation and distribution
 
 ## Installation
